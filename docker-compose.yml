@@ -7,3 +7,9 @@ services:
     volumes:
       - ${VAULT_PATH}:/usr/src/app/obsidian-vault
     restart: unless-stopped
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
