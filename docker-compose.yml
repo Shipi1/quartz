@@ -1,5 +1,6 @@
 services:
   quartz:
+    container_name: quartz
     build: .
     expose:
       - "8080"
