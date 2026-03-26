@@ -1,0 +1,8 @@
+services:
+  quartz:
+    build: .
+    expose:
+      - "8080"
+    volumes:
+      - ${VAULT_PATH}:/usr/src/app/obsidian-vault
+    restart: unless-stopped
