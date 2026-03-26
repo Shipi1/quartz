@@ -23,6 +23,13 @@ function coerceDate(fp: string, d: any): Date {
     d = `${d}T00:00:00`
   }
 
+  // Unix timestamp in seconds (number or numeric string)
+  if (typeof d === "string" && /^\d{9,10}$/.test(d)) {
+    d = Number(d) * 1000
+  } else if (typeof d === "number" && d > 0 && d < 1e11) {
+    d = d * 1000
+  }
+
   const dt = new Date(d)
   const invalidDate = isNaN(dt.getTime()) || dt.getTime() === 0
   if (invalidDate && d !== undefined) {
@@ -74,8 +81,8 @@ export const CreatedModifiedDate: QuartzTransformerPlugin<Partial<Options>> = (u
                 created ||= st.birthtimeMs
                 modified ||= st.mtimeMs
               } else if (source === "frontmatter" && file.data.frontmatter) {
-                created ||= file.data.frontmatter.created as MaybeDate
-                modified ||= file.data.frontmatter.modified as MaybeDate
+                created ||= (file.data.frontmatter["date created"] ?? file.data.frontmatter.created) as MaybeDate
+                modified ||= (file.data.frontmatter["date modified"] ?? file.data.frontmatter.modified) as MaybeDate
                 published ||= file.data.frontmatter.published as MaybeDate
               } else if (source === "git" && repo) {
                 try {
